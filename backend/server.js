@@ -1,6 +1,8 @@
 import express from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
+import path from 'path';
+import { fileURLToPath } from 'url';
 
 // Config & DB
 import connectDB from './config/db.js';
@@ -18,6 +20,9 @@ import userRoutes from './routes/userRoutes.js';
 // Load env variables
 dotenv.config();
 
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
 // Connect Database
 connectDB();
 
@@ -34,14 +39,18 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 // =====================
-// Root Route
+// Root / Production Static Files
 // =====================
-app.get('/', (req, res) => {
-  res.status(200).json({
-    message: '🚀 Taskie API is running',
-    status: 'OK'
+if (process.env.NODE_ENV === 'production') {
+  app.use(express.static(path.join(__dirname, '../dist')));
+} else {
+  app.get('/', (req, res) => {
+    res.status(200).json({
+      message: '🚀 Taskie API is running',
+      status: 'OK'
+    });
   });
-});
+}
 
 // =====================
 // Health Check
@@ -68,13 +77,21 @@ app.use('/api/users', userRoutes);
 app.use(errorHandler);
 
 // =====================
-// 404 Handler (LAST)
+// 404 Handler for API & Catch-all for React
 // =====================
-app.use((req, res) => {
-  res.status(404).json({
-    success: false,
-    message: 'Route not found'
-  });
+app.use((req, res, next) => {
+  if (req.originalUrl.startsWith('/api')) {
+    return res.status(404).json({
+      success: false,
+      message: 'Route not found'
+    });
+  }
+  
+  if (process.env.NODE_ENV === 'production') {
+    res.sendFile(path.resolve(__dirname, '../dist', 'index.html'));
+  } else {
+    res.status(404).send('Route not found');
+  }
 });
 
 // =====================
