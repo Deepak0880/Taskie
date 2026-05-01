@@ -1,6 +1,7 @@
 import express from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
+import path from 'path';
 
 // Config & DB
 import connectDB from './config/db.js';
@@ -27,21 +28,9 @@ const PORT = process.env.PORT || 5000;
 // =====================
 // Middleware
 // =====================
-app.use(cors({
-  origin: process.env.FRONTEND_URL || '*',
-}));
+app.use(cors()); // same-origin → no need for strict CORS
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-
-// =====================
-// Root Route
-// =====================
-app.get('/', (req, res) => {
-  res.status(200).json({
-    message: '🚀 Taskie API is running',
-    status: 'OK'
-  });
-});
 
 // =====================
 // Health Check
@@ -73,6 +62,19 @@ app.use((req, res, next) => {
     });
   }
   next();
+});
+
+// =====================
+// SERVE FRONTEND (Vite build)
+// =====================
+const __dirname = path.resolve();
+
+// serve static files
+app.use(express.static(path.join(__dirname, '../dist')));
+
+// SPA fallback (CRITICAL)
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname, '../dist', 'index.html'));
 });
 
 // =====================
