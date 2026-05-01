@@ -1,8 +1,6 @@
 import express from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
-import path from 'path';
-import { fileURLToPath } from 'url';
 
 // Config & DB
 import connectDB from './config/db.js';
@@ -20,9 +18,6 @@ import userRoutes from './routes/userRoutes.js';
 // Load env variables
 dotenv.config();
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
-
 // Connect Database
 connectDB();
 
@@ -33,24 +28,20 @@ const PORT = process.env.PORT || 5000;
 // Middleware
 // =====================
 app.use(cors({
-  origin: '*',
+  origin: process.env.FRONTEND_URL || '*',
 }));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 // =====================
-// Root / Production Static Files
+// Root Route
 // =====================
-if (process.env.NODE_ENV === 'production') {
-  app.use(express.static(path.join(__dirname, '../dist')));
-} else {
-  app.get('/', (req, res) => {
-    res.status(200).json({
-      message: '🚀 Taskie API is running',
-      status: 'OK'
-    });
+app.get('/', (req, res) => {
+  res.status(200).json({
+    message: '🚀 Taskie API is running',
+    status: 'OK'
   });
-}
+});
 
 // =====================
 // Health Check
@@ -72,12 +63,7 @@ app.use('/api/dashboard', dashboardRoutes);
 app.use('/api/users', userRoutes);
 
 // =====================
-// Error Handler (MUST COME FIRST)
-// =====================
-app.use(errorHandler);
-
-// =====================
-// 404 Handler for API & Catch-all for React
+// 404 Handler (API only)
 // =====================
 app.use((req, res, next) => {
   if (req.originalUrl.startsWith('/api')) {
@@ -86,13 +72,13 @@ app.use((req, res, next) => {
       message: 'Route not found'
     });
   }
-  
-  if (process.env.NODE_ENV === 'production') {
-    res.sendFile(path.resolve(__dirname, '../dist', 'index.html'));
-  } else {
-    res.status(404).send('Route not found');
-  }
+  next();
 });
+
+// =====================
+// Error Handler (LAST)
+// =====================
+app.use(errorHandler);
 
 // =====================
 // Server Start
