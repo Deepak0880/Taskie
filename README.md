@@ -1,16 +1,106 @@
 # React + Vite
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+# 🚀 Taskie - Task Management App
 
-Currently, two official plugins are available:
+Taskie is a full-stack task management application designed to help users organize, track, and manage daily tasks efficiently. It provides a clean UI and smooth user experience with powerful backend support.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+---
 
-## React Compiler
+## 📌 Features
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+* ✅ Create, update, and delete tasks
+* 📋 View all tasks in an organized dashboard
+* 🔍 Filter and manage tasks easily
+* 🧠 Smart task handling (AI integration support)
+* 🔐 Secure backend architecture
+* ⚡ Fast and responsive UI
 
-## Expanding the ESLint configuration
+---
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+## 🛠️ Tech Stack
+
+**Frontend:**
+
+* React.js
+* CSS / Tailwind (if used)
+
+**Backend:**
+
+* Node.js
+* Express.js
+
+**Database:**
+
+* MongoDB
+
+---
+
+## 📂 Project Structure
+
+```
+Taskie/
+│
+├── backend/
+│   ├── controller/
+│   ├── model/
+│   ├── routes/
+│   └── services/
+│
+├── frontend/
+│   ├── components/
+│   └── pages/
+│
+└── README.md
+```
+
+---
+
+## ⚙️ Installation & Setup
+
+### 1️⃣ Clone the repository
+
+```bash
+git clone https://github.com/Deepak0880/Taskie.git
+cd Taskie
+```
+
+### 2️⃣ Setup Backend
+
+```bash
+cd backend
+npm install
+npm start
+```
+
+### 3️⃣ Setup Frontend
+
+```bash
+cd frontend
+npm install
+npm start
+```
+
+---
+
+## 🔗 API Usage
+
+* GET `/tasks` → Get all tasks
+* POST `/tasks` → Create a new task
+* PUT `/tasks/:id` → Update task
+* DELETE `/tasks/:id` → Delete task
+
+---
+
+## 🌟 Future Enhancements
+
+* 🔔 Notifications system
+* 📱 Mobile responsive improvements
+* 👥 User authentication & roles
+* 🤖 Advanced AI-based task suggestions
+
+---
+
+## 👨‍💻 Author
+
+**Deepak**
+GitHub: https://github.com/Deepak0880
